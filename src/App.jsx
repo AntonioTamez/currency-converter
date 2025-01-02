@@ -7,12 +7,13 @@ const App = () => {
   const [toCurrency, setToCurrency] = useState("EUR");
   const [amount, setAmount] = useState(1);
   const [result, setResult] = useState(null);
+  
+  const apiKey = import.meta.env.VITE_API_KEY;
+
 
   useEffect(() => {
-    // Fetch currency list on load
-    axios.get("https://api.exchangerate.host/list?access_key=7271466c09f5aaf79796a12e283ae46a")
-      .then(response => {
-        console.log('aaaaa', response);
+    axios.get(`https://api.exchangerate.host/list?access_key=${apiKey}`)
+      .then(response => { 
         setCurrencies(Object.keys(response.data.currencies));
       })
       .catch(error => console.error("Error fetching currencies:", error));
@@ -20,7 +21,7 @@ const App = () => {
 
   const handleConvert = () => {
     axios
-      .get(`https://api.exchangerate.host/convert?from=${fromCurrency}&to=${toCurrency}&amount=${amount}?access_key=7271466c09f5aaf79796a12e283ae46a`)
+      .get(`https://api.exchangerate.host/convert?from=${fromCurrency}&to=${toCurrency}&amount=${amount}&access_key=${apiKey}`)
       .then(response => setResult(response.data.result))
       .catch(error => console.error("Error converting currency:", error));
   };
