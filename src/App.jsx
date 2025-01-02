@@ -63,6 +63,7 @@ const CurrencyConverter = () => {
         value={amount}
         placeholder="Amount"
         onChange={(e) => setAmount(e.target.value)}
+        className="input-amount"
       />
       <button onClick={handleConvert}>Convert</button>
       {result && (
