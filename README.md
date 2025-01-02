@@ -19,6 +19,13 @@ The application features a simple, intuitive, and easy-to-use interface. It is d
 
 ---
 
+## 🎨 **Live preview**
+
+### Demo:
+[Currency Converter Demo](https://scintillating-pika-8a9033.netlify.app/)
+
+---
+
 ## 🔧 **Technologies Used**
 
 - **Frontend:**
@@ -90,13 +97,6 @@ currency-converter/
 ├── vite.config.js   # Vite configuration
 └── README.md        # Project documentation
 ```
-
----
-
-## 🎨 **Screenshots**
-
-### Main Screen:
-![Screenshot](https://via.placeholder.com/800x400?text=Main+Screen+Screenshot)
 
 ---
 
