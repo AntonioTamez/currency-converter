@@ -14,10 +14,8 @@ const CurrencyConverter = () => {
   useEffect(() => {
     const fetchCurrencies = async () => {
       try {
-        const response = await fetch(`https://api.exchangerate.host/list?access_key=${apiKey}`);
-        console.log('sssss',response)
-        const data = await response.json();
-        console.log('aaaaaaaaaaa',data)
+        const response = await fetch(`https://api.exchangerate.host/list?access_key=${apiKey}`); 
+        const data = await response.json(); 
         if (data.currencies) {
           const currencyList = Object.keys(data.currencies);
           setCurrencies(currencyList);
