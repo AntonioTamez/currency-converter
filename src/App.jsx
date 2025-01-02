@@ -1,76 +1,77 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import "./index.css";
 
-const App = () => {
+const CurrencyConverter = () => {
   const [currencies, setCurrencies] = useState([]);
-  const [fromCurrency, setFromCurrency] = useState("USD");
-  const [toCurrency, setToCurrency] = useState("EUR");
+  const [fromCurrency, setFromCurrency] = useState("MXN");
+  const [toCurrency, setToCurrency] = useState("USD");
   const [amount, setAmount] = useState(1);
   const [result, setResult] = useState(null);
-  
+
   const apiKey = import.meta.env.VITE_API_KEY;
 
-
+  // Fetch available currencies
   useEffect(() => {
-    axios.get(`https://api.exchangerate.host/list?access_key=${apiKey}`)
-      .then(response => { 
-        setCurrencies(Object.keys(response.data.currencies));
-      })
-      .catch(error => console.error("Error fetching currencies:", error));
+    const fetchCurrencies = async () => {
+      try {
+        const response = await fetch(`https://api.exchangerate.host/list?access_key=${apiKey}`);
+        console.log('sssss',response)
+        const data = await response.json();
+        console.log('aaaaaaaaaaa',data)
+        if (data.currencies) {
+          const currencyList = Object.keys(data.currencies);
+          setCurrencies(currencyList);
+        } else {
+          throw new Error("No currencies found in API response.");
+        }
+      } catch (error) {
+        console.error("Error fetching currencies:", error);
+      }
+    };
+
+    fetchCurrencies();
   }, []);
 
   const handleConvert = () => {
-    axios
-      .get(`https://api.exchangerate.host/convert?from=${fromCurrency}&to=${toCurrency}&amount=${amount}&access_key=${apiKey}`)
-      .then(response => setResult(response.data.result))
-      .catch(error => console.error("Error converting currency:", error));
+    const url = `https://api.exchangerate.host/convert?from=${fromCurrency}&to=${toCurrency}&amount=${amount}&access_key=${apiKey}`;
+
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => setResult(data.result))
+      .catch((error) => console.error("Error fetching conversion:", error));
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "500px", margin: "auto" }}>
+    <div className="container">
       <h1>Currency Converter</h1>
-      <div style={{ marginBottom: "10px" }}>
-        <label>
-          From:
-          <select value={fromCurrency} onChange={e => setFromCurrency(e.target.value)}>
-            {currencies.map(currency => (
-              <option key={currency} value={currency}>
-                {currency}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-      <div style={{ marginBottom: "10px" }}>
-        <label>
-          To:
-          <select value={toCurrency} onChange={e => setToCurrency(e.target.value)}>
-            {currencies.map(currency => (
-              <option key={currency} value={currency}>
-                {currency}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-      <div style={{ marginBottom: "10px" }}>
-        <label>
-          Amount:
-          <input
-            type="number"
-            value={amount}
-            onChange={e => setAmount(e.target.value)}
-          />
-        </label>
-      </div>
+      <select value={fromCurrency} onChange={(e) => setFromCurrency(e.target.value)}>
+        {currencies.map((currency) => (
+          <option key={currency} value={currency}>
+            {currency}
+          </option>
+        ))}
+      </select>
+      <select value={toCurrency} onChange={(e) => setToCurrency(e.target.value)}>
+        {currencies.map((currency) => (
+          <option key={currency} value={currency}>
+            {currency}
+          </option>
+        ))}
+      </select>
+      <input
+        type="number"
+        value={amount}
+        placeholder="Amount"
+        onChange={(e) => setAmount(e.target.value)}
+      />
       <button onClick={handleConvert}>Convert</button>
       {result && (
-        <h2 style={{ marginTop: "20px" }}>
+        <div className="result">
           {amount} {fromCurrency} = {result.toFixed(2)} {toCurrency}
-        </h2>
+        </div>
       )}
     </div>
   );
 };
 
-export default App;
+export default CurrencyConverter;
